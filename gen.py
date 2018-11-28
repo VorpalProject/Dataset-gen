@@ -14,8 +14,8 @@ def seg(img):
     end = [img.size[0], img.size[1]]
     x = 0
     y = 0
-    while y != img.size[1] and img.getpixel((x, y)) == (255, 255, 255) \
-            and x < img.size[0]:
+    while y != img.size[1] and x < img.size[0] and \
+            img.getpixel((x, y)) == (255, 255, 255):
         y += 1
         if img.size[1] == y:
             y = 0
@@ -25,8 +25,8 @@ def seg(img):
     
     x = 0
     y = 0
-    while x != img.size[0] and img.getpixel((x, y)) == (255, 255, 255) \
-            and y < img.size[1]:
+    while x != img.size[0]  and y < img.size[1] and \
+            img.getpixel((x, y)) == (255, 255, 255):
         x += 1
         if img.size[0] == x:
             x = 0
@@ -35,8 +35,8 @@ def seg(img):
 
     x = img.size[0] - 1
     y = img.size[1] - 1
-    while y != img.size[1] and img.getpixel((x, y)) == (255, 255, 255) \
-            and x > 0:
+    while y != img.size[1] and x > 0 and \
+            img.getpixel((x, y)) == (255, 255, 255):
         y -= 1
         if y < 0:
             y = img.size[1] - 1
@@ -46,8 +46,8 @@ def seg(img):
     
     x = img.size[0] - 1
     y = img.size[1] - 1
-    while x != img.size[0] and img.getpixel((x, y)) == (255, 255, 255) \
-            and y > 0:
+    while x != img.size[0] and y > 0 and \
+            img.getpixel((x, y)) == (255, 255, 255):
         x -= 1
         if x < 0:
             x = img.size[0] - 1
@@ -58,6 +58,9 @@ def seg(img):
 
 
 def gen(letter, fontname, path, fontdir="fonts/", bindir="bin/"):
+    if os.path.exists(bindir + path):
+        return
+    
     img = Image.new('RGB', (512, 512), color=(255, 255, 255))
     
     draw = ImageDraw.Draw(img)
