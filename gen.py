@@ -60,28 +60,33 @@ def gen(letter, font, path, fontdir="fonts/", bindir="bin/"):
     img = Image.new('RGB', (512, 512), color=(255, 255, 255))
     
     draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype(fontdir + font, 400)
+    font = ImageFont.truetype(fontdir + font, 256)
     draw.text((0, 0), letter, (0, 0, 0), font=font)
-    img.show()
     
     rstart, rend = seg(img)
-    box = (rstart[0], rstart[1], rend[0] - rstart[0], rend[1] - rstart[1])
-    img = img.resize((28, 28), resample=PIL.Image.BOX, box=box)
+    cbox = (rstart[0], rstart[1], rend[0], rend[1])
     
-    
+    letter = img.crop(box=cbox)
 
-    img.save(bindir + path)
+    rbox = (0, 0) + letter.size
+    mini = letter.resize((28, 28), PIL.Image.ANTIALIAS)
+    
+    draw.line((rstart[0], rstart[1], rend[0], rstart[1]), fill=(0, 0, 0))
+    draw.line((rstart[0], rstart[1], rstart[0], rend[1]), fill=(0, 0, 0))
+    draw.line((rstart[0], rend[1], rend[0], rend[1]), fill=(0, 0, 0))
+    draw.line((rend[0], rstart[1], rend[0], rend[1]), fill=(0, 0, 0))
+    
+    mini.save(bindir + path, quality=100)
 
 
 def main():
     ascii_table = []
-    for i in range(97, 128):   #33
+    for i in range(33, 128):   #33
         ascii_table.append(i)
     for c in ascii_table:
         letter = chr(c)
         print("ascii: " + str(c) + "  " + letter)
         gen(letter, "sans-serif-Aaargh.ttf", "" + str(c) + ".png")
-        return
 
 if __name__ == "__main__":
     main()
